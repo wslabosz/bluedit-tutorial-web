@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import NextLink from 'next/link'
-import { Box, Button, Link } from '@chakra-ui/react'
+import { Box, Button, Link, Flex } from '@chakra-ui/react'
 import { Formik, Form } from 'formik'
 import { InputField } from '../../components/InputField'
 import { Wrapper } from '../../components/Wrapper'
@@ -48,12 +48,14 @@ const ChangePassword: NextPage = () => {
                      type="password"
                   />
                   {tokenError ? (
-                     <Box>
-                        <Box color="red">{tokenError}</Box>
+                     <Flex>
+                        <Box mr={2} color="red">
+                           {tokenError}
+                        </Box>
                         <NextLink href="/forgot-password">
-                           <Link>I forgot password</Link>
+                           <Link>I want to reset password once more</Link>
                         </NextLink>
-                     </Box>
+                     </Flex>
                   ) : null}
                   <Button
                      mt={4}
