@@ -14,7 +14,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
    let body = null
 
    // data is loading
-   if (fetching) {
+   if (isServer() || fetching) {
       // user not logged in
    } else if (!data?.me) {
       body = (
@@ -50,7 +50,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
    }
 
    return (
-      <Flex bg="#289" p={4}>
+      <Flex zIndex={1} position="sticky" top={0} bg="#289" p={4}>
          <Box ml="auto">{body}</Box>
       </Flex>
    )
