@@ -13,7 +13,6 @@ import { createUrqlClient } from '../../utils/createUrqlClient'
 
 const ChangePassword: NextPage = () => {
    const router = useRouter()
-   const { token } = router.query
    const [, changePassword] = useChangePasswordMutation()
    const [tokenError, setTokenError] = useState('')
    return (
@@ -23,7 +22,8 @@ const ChangePassword: NextPage = () => {
             onSubmit={async (values, { setErrors }) => {
                const response = await changePassword({
                   newPassword: values.newPassword,
-                  token: token as string,
+                  token:
+                     router.query.token === 'string' ? router.query.token : '',
                })
                if (response.data?.changePassword.errors) {
                   const errorMap = toErrorMap(
