@@ -1,6 +1,11 @@
-import { dedupExchange, fetchExchange, Exchange } from 'urql'
+import {
+   dedupExchange,
+   fetchExchange,
+   Exchange,
+   stringifyVariables,
+} from 'urql'
 import { pipe, tap } from 'wonka'
-import { cacheExchange } from '@urql/exchange-graphcache'
+import { cacheExchange, Resolver } from '@urql/exchange-graphcache'
 import {
    LoginMutation,
    MeDocument,
@@ -32,6 +37,11 @@ export const createUrqlClient = (ssrExchange: any) => ({
    exchanges: [
       dedupExchange,
       cacheExchange({
+         resolvers: {
+            Query: {
+               posts: cursorPagination(),
+            },
+         },
          updates: {
             Mutation: {
                logout: (_result, args, cache, info) => {
@@ -84,3 +94,33 @@ export const createUrqlClient = (ssrExchange: any) => ({
       fetchExchange,
    ],
 })
+
+export const cursorPagination = (): Resolver => {
+   return (_parent, fieldArgs, cache, info) => {
+      const { parentKey: entityKey, fieldName } = info
+
+      const allFields = cache.inspectFields(entityKey)
+      const fieldInfos = allFields.filter(
+         (info) => info.fieldName === fieldName
+      )
+      const size = fieldInfos.length
+      if (size === 0) {
+         return undefined
+      }
+
+      const fieldKey = `${fieldName}(${stringifyVariables(fieldArgs)})`
+      const isItInTheCache = cache.resolve(
+         cache.resolve(entityKey, fieldKey) as string,
+         'posts'
+      )
+      info.partial = !isItInTheCache
+
+      console.log(isItInTheCache)
+      const results: string[] = []
+      fieldInfos.forEach((field) => {
+         const data = cache.resolve(entityKey, field.fieldKey) as string[]
+         results.push(...data)
+      })
+      return results
+   }
+}
