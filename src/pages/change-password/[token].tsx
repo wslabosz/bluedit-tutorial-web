@@ -21,9 +21,11 @@ const ChangePassword: NextPage = () => {
             initialValues={{ newPassword: '' }}
             onSubmit={async (values, { setErrors }) => {
                const response = await changePassword({
-                  newPassword: values.newPassword,
                   token:
-                     router.query.token === 'string' ? router.query.token : '',
+                     typeof router.query.token === 'string'
+                        ? router.query.token
+                        : '',
+                  newPassword: values.newPassword,
                })
                if (response.data?.changePassword.errors) {
                   const errorMap = toErrorMap(

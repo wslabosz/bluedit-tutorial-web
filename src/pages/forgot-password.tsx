@@ -21,9 +21,7 @@ export const ForgotPassword: React.FC<{}> = ({}) => {
          >
             {({ isSubmitting }) =>
                complete ? (
-                  <Box>
-                     Check your mail inbox for a message!
-                  </Box>
+                  <Box>Check your mail inbox for a message!</Box>
                ) : (
                   <Form>
                      <InputField
