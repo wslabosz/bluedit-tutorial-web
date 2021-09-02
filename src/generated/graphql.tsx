@@ -25,6 +25,7 @@ export type Mutation = {
   createPost: Post;
   updatePost: Post;
   deletePost: Scalars['Boolean'];
+  vote: Scalars['Boolean'];
   register: UserResponse;
   login: UserResponse;
   logout: Scalars['Boolean'];
@@ -46,6 +47,12 @@ export type MutationUpdatePostArgs = {
 
 export type MutationDeletePostArgs = {
   id: Scalars['Float'];
+};
+
+
+export type MutationVoteArgs = {
+  upvoteValue: Scalars['Int'];
+  postId: Scalars['Int'];
 };
 
 
@@ -83,6 +90,7 @@ export type Post = {
   text: Scalars['String'];
   points: Scalars['String'];
   creatorId: Scalars['Float'];
+  createdBy: User;
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
   textSnippet: Scalars['String'];
@@ -191,7 +199,7 @@ export type PostsQueryVariables = Exact<{
 }>;
 
 
-export type PostsQuery = { __typename?: 'Query', posts: { __typename?: 'PaginatedPosts', hasMore: boolean, posts: Array<{ __typename?: 'Post', id: number, createdAt: string, updatedAt: string, title: string, textSnippet: string }> } };
+export type PostsQuery = { __typename?: 'Query', posts: { __typename?: 'PaginatedPosts', hasMore: boolean, posts: Array<{ __typename?: 'Post', id: number, createdAt: string, updatedAt: string, title: string, textSnippet: string, createdBy: { __typename?: 'User', id: number, username: string } }> } };
 
 export const DefaultErrorFragmentDoc = gql`
     fragment DefaultError on FieldError {
@@ -305,6 +313,10 @@ export const PostsDocument = gql`
       updatedAt
       title
       textSnippet
+      createdBy {
+        id
+        username
+      }
     }
   }
 }
