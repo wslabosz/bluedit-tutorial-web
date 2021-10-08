@@ -89,6 +89,7 @@ export type Post = {
   title: Scalars['String'];
   text: Scalars['String'];
   points: Scalars['String'];
+  voteStatus?: Maybe<Scalars['Int']>;
   creatorId: Scalars['Float'];
   createdBy: User;
   createdAt: Scalars['String'];
@@ -146,7 +147,7 @@ export type DefaultUserFragment = { __typename?: 'User', id: number, username: s
 
 export type DefaultUserResponseFragment = { __typename?: 'UserResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, user?: Maybe<{ __typename?: 'User', id: number, username: string }> };
 
-export type PostSnippetFragment = { __typename?: 'Post', id: number, createdAt: string, updatedAt: string, title: string, points: string, textSnippet: string, createdBy: { __typename?: 'User', id: number, username: string } };
+export type PostSnippetFragment = { __typename?: 'Post', id: number, createdAt: string, updatedAt: string, title: string, points: string, textSnippet: string, voteStatus?: Maybe<number>, createdBy: { __typename?: 'User', id: number, username: string } };
 
 export type ChangePasswordMutationVariables = Exact<{
   token: Scalars['String'];
@@ -209,7 +210,7 @@ export type PostsQueryVariables = Exact<{
 }>;
 
 
-export type PostsQuery = { __typename?: 'Query', posts: { __typename?: 'PaginatedPosts', hasMore: boolean, posts: Array<{ __typename?: 'Post', id: number, createdAt: string, updatedAt: string, title: string, points: string, textSnippet: string, createdBy: { __typename?: 'User', id: number, username: string } }> } };
+export type PostsQuery = { __typename?: 'Query', posts: { __typename?: 'PaginatedPosts', hasMore: boolean, posts: Array<{ __typename?: 'Post', id: number, createdAt: string, updatedAt: string, title: string, points: string, textSnippet: string, voteStatus?: Maybe<number>, createdBy: { __typename?: 'User', id: number, username: string } }> } };
 
 export const DefaultErrorFragmentDoc = gql`
     fragment DefaultError on FieldError {
@@ -242,6 +243,7 @@ export const PostSnippetFragmentDoc = gql`
   title
   points
   textSnippet
+  voteStatus
   createdBy {
     id
     username
