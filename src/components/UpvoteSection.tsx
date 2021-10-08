@@ -11,7 +11,7 @@ export const UpvoteSection: React.FC<UpvoteSectionProps> = ({ post }) => {
    const [loadingState, setLoadingState] = useState<
       'upvote-loading' | 'downvote-loading' | 'not-loading'
    >('not-loading')
-   const [, vote] = useVoteMutation()
+   const [,vote] = useVoteMutation()
    return (
       <Box d="flex" flexDirection="column" mr={3} ml={-2} alignItems="center">
          <IconButton
@@ -19,7 +19,7 @@ export const UpvoteSection: React.FC<UpvoteSectionProps> = ({ post }) => {
                setLoadingState('upvote-loading')
                await vote({
                   postId: post.id,
-                  upvoteValue: 1,
+                  value: 1,
                })
                setLoadingState('not-loading')
             }}
@@ -34,7 +34,7 @@ export const UpvoteSection: React.FC<UpvoteSectionProps> = ({ post }) => {
                setLoadingState('downvote-loading')
                await vote({
                   postId: post.id,
-                  upvoteValue: -1,
+                  value: -1,
                })
                setLoadingState('not-loading')
             }}

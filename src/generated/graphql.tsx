@@ -51,7 +51,7 @@ export type MutationDeletePostArgs = {
 
 
 export type MutationVoteArgs = {
-  upvoteValue: Scalars['Int'];
+  value: Scalars['Int'];
   postId: Scalars['Int'];
 };
 
@@ -191,7 +191,7 @@ export type RegisterMutationVariables = Exact<{
 export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'UserResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, user?: Maybe<{ __typename?: 'User', id: number, username: string }> } };
 
 export type VoteMutationVariables = Exact<{
-  upvoteValue: Scalars['Int'];
+  value: Scalars['Int'];
   postId: Scalars['Int'];
 }>;
 
@@ -317,8 +317,8 @@ export function useRegisterMutation() {
   return Urql.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument);
 };
 export const VoteDocument = gql`
-    mutation Vote($upvoteValue: Int!, $postId: Int!) {
-  vote(upvoteValue: $upvoteValue, postId: $postId)
+    mutation Vote($value: Int!, $postId: Int!) {
+  vote(value: $value, postId: $postId)
 }
     `;
 
@@ -338,7 +338,7 @@ export function useMeQuery(options: Omit<Urql.UseQueryArgs<MeQueryVariables>, 'q
 };
 export const PostsDocument = gql`
     query Posts($limit: Int!, $cursor: String) {
-  posts(cursor: $cursor, limit: $limit) {
+  posts(limit: $limit, cursor: $cursor) {
     hasMore
     posts {
       ...PostSnippet
