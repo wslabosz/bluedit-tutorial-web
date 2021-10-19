@@ -13,12 +13,17 @@ const Index = () => {
       limit: 10,
       cursor: null as string | null,
    })
-   const [{ data, fetching }] = usePostsQuery({
+   const [{ data, error, fetching }] = usePostsQuery({
       variables,
    })
 
    if (!fetching && !data) {
-      return <div>TBD (query failed, no data fetched)</div>
+      return (
+         <div>
+            <div>TBD (query failed, no data fetched)</div>
+            <div>{error?.message}</div>
+         </div>
+      )
    }
 
    return (
@@ -33,7 +38,7 @@ const Index = () => {
                         <UpvoteSection post={p} />
                         <Box flex={1}>
                            <Text fontSize="small">
-                              posted by {p.createdBy.username}
+                              posted by {p.creator.username}
                            </Text>
                            <NextLink href="/post/[id]" as={`/post/${p.id}`}>
                               <Link>
@@ -46,7 +51,7 @@ const Index = () => {
                               </Text>
                               <EditDeletePostButtons
                                  id={p.id}
-                                 creatorId={p.createdBy.id}
+                                 creatorId={p.creator.id}
                               />
                            </Flex>
                         </Box>

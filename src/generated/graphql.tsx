@@ -92,7 +92,7 @@ export type Post = {
   points: Scalars['String'];
   voteStatus?: Maybe<Scalars['Int']>;
   creatorId: Scalars['Float'];
-  createdBy: User;
+  creator: User;
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
   textSnippet: Scalars['String'];
@@ -148,7 +148,7 @@ export type DefaultUserFragment = { __typename?: 'User', id: number, username: s
 
 export type DefaultUserResponseFragment = { __typename?: 'UserResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, user?: Maybe<{ __typename?: 'User', id: number, username: string }> };
 
-export type PostSnippetFragment = { __typename?: 'Post', id: number, createdAt: string, updatedAt: string, title: string, points: string, textSnippet: string, voteStatus?: Maybe<number>, createdBy: { __typename?: 'User', id: number, username: string } };
+export type PostSnippetFragment = { __typename?: 'Post', id: number, createdAt: string, updatedAt: string, title: string, points: string, textSnippet: string, voteStatus?: Maybe<number>, creator: { __typename?: 'User', id: number, username: string } };
 
 export type ChangePasswordMutationVariables = Exact<{
   token: Scalars['String'];
@@ -234,7 +234,7 @@ export type PostsQueryVariables = Exact<{
 }>;
 
 
-export type PostsQuery = { __typename?: 'Query', posts: { __typename?: 'PaginatedPosts', hasMore: boolean, posts: Array<{ __typename?: 'Post', id: number, createdAt: string, updatedAt: string, title: string, points: string, textSnippet: string, voteStatus?: Maybe<number>, createdBy: { __typename?: 'User', id: number, username: string } }> } };
+export type PostsQuery = { __typename?: 'Query', posts: { __typename?: 'PaginatedPosts', hasMore: boolean, posts: Array<{ __typename?: 'Post', id: number, createdAt: string, updatedAt: string, title: string, points: string, textSnippet: string, voteStatus?: Maybe<number>, creator: { __typename?: 'User', id: number, username: string } }> } };
 
 export const DefaultErrorFragmentDoc = gql`
     fragment DefaultError on FieldError {
@@ -268,7 +268,7 @@ export const PostSnippetFragmentDoc = gql`
   points
   textSnippet
   voteStatus
-  createdBy {
+  creator {
     id
     username
   }
