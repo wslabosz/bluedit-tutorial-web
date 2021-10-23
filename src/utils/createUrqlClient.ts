@@ -5,7 +5,7 @@ import {
    stringifyVariables,
 } from 'urql'
 import { pipe, tap } from 'wonka'
-import { cacheExchange, Resolver } from '@urql/exchange-graphcache'
+import { cacheExchange, Resolver, Cache } from '@urql/exchange-graphcache'
 import {
    LoginMutation,
    MeDocument,
@@ -32,6 +32,14 @@ const errorExchange: Exchange =
          })
       )
    }
+
+const invalidateAllPosts = (cache: Cache) => {
+   const allField = cache.inspectFields('Query')
+   const fieldInfos = allField.filter((info) => info.fieldName === 'posts')
+   fieldInfos.forEach((fi) => {
+      cache.invalidate('Query', 'posts', fi.arguments)
+   })
+}
 
 export const createUrqlClient = (ssrExchange: any, ctx: any) => {
    let cookie = ``
@@ -98,13 +106,7 @@ export const createUrqlClient = (ssrExchange: any, ctx: any) => {
                      }
                   },
                   createPost: (_result, args, cache, info) => {
-                     const allField = cache.inspectFields('Query')
-                     const fieldInfos = allField.filter(
-                        (info) => info.fieldName === 'posts'
-                     )
-                     fieldInfos.forEach((fi) => {
-                        cache.invalidate('Query', 'posts', fi.arguments)
-                     })
+                     invalidateAllPosts(cache)
                   },
 
                   logout: (_result, args, cache, info) => {
@@ -131,6 +133,7 @@ export const createUrqlClient = (ssrExchange: any, ctx: any) => {
                            }
                         }
                      )
+                     invalidateAllPosts(cache)
                   },
 
                   register: (_result, args, cache, info) => {
