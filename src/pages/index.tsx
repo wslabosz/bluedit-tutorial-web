@@ -1,23 +1,21 @@
 import { usePostsQuery } from '../generated/graphql'
-import { withUrqlClient } from 'next-urql'
-import { createUrqlClient } from '../utils/createUrqlClient'
 import { Layout } from '../components/Layout'
 import { Box, Button, Flex, Heading, Link, Stack, Text } from '@chakra-ui/react'
 import NextLink from 'next/link'
-import React, { useState } from 'react'
+import React from 'react'
 import { UpvoteSection } from '../components/UpvoteSection'
 import EditDeletePostButtons from '../components/EditDeletePostButtons'
 
 const Index = () => {
-   const [variables, setVariables] = useState({
-      limit: 10,
-      cursor: null as string | null,
-   })
-   const [{ data, error, fetching }] = usePostsQuery({
-      variables,
+   const { data, error, loading, fetchMore, variables } = usePostsQuery({
+      variables: {
+         limit: 10,
+         cursor: null as string | null,
+      },
+      notifyOnNetworkStatusChange: true,
    })
 
-   if (!fetching && !data) {
+   if (!loading && !data) {
       return (
          <div>
             <div>TBD (query failed, no data fetched)</div>
@@ -28,7 +26,7 @@ const Index = () => {
 
    return (
       <Layout>
-         {fetching && !data ? (
+         {loading && !data ? (
             <div>loading...</div>
          ) : (
             <Stack spacing={8}>
@@ -64,14 +62,16 @@ const Index = () => {
             <Flex>
                <Button
                   onClick={() => {
-                     setVariables({
-                        limit: variables.limit,
-                        cursor:
-                           data.posts.posts[data.posts.posts.length - 1]
-                              .createdAt,
+                     fetchMore({
+                        variables: {
+                           limit: variables!.limit,
+                           cursor:
+                              data.posts.posts[data.posts.posts.length - 1]
+                                 .createdAt,
+                        },
                      })
                   }}
-                  isLoading={fetching}
+                  isLoading={loading}
                   m="auto"
                   my={9}
                >
@@ -83,4 +83,4 @@ const Index = () => {
    )
 }
 
-export default withUrqlClient(createUrqlClient, { ssr: true })(Index)
+export default Index
