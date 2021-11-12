@@ -6,6 +6,7 @@ import { Box, Button } from '@chakra-ui/react'
 import { usePostQuery, useUpdatePostMutation } from '../../../generated/graphql'
 import useGetIntId from '../../../utils/useGetIntId'
 import { useRouter } from 'next/router'
+import { withApollo } from '../../../utils/withApollo'
 
 const EditPost = ({}) => {
    const router = useRouter()
@@ -67,4 +68,4 @@ const EditPost = ({}) => {
    )
 }
 
-export default EditPost
+export default withApollo({ ssr: false })(EditPost)

@@ -6,6 +6,7 @@ import { useCreatePostMutation } from '../generated/graphql'
 import { useRouter } from 'next/router'
 import { Layout } from '../components/Layout'
 import { useIsAuth } from '../utils/useIsAuth'
+import { withApollo } from '../utils/withApollo'
 
 const CreatePost: React.FC<{}> = ({}) => {
    const router = useRouter()
@@ -18,6 +19,9 @@ const CreatePost: React.FC<{}> = ({}) => {
             onSubmit={async (values) => {
                const { errors } = await createPost({
                   variables: { input: values },
+                  update: (cache) => {
+                     cache.evict({ fieldName: 'posts:{}' })
+                  },
                })
                if (!errors) {
                   router.push('/')
@@ -50,4 +54,4 @@ const CreatePost: React.FC<{}> = ({}) => {
    )
 }
 
-export default CreatePost
+export default withApollo({ ssr: false })(CreatePost)
